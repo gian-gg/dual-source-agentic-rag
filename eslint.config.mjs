@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // User requested ignores:
+    "*.config.mjs",
+    "*.config.ts",
   ]),
 ]);
 
