@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "dual-source-agentic-rag",
   description:
-    "A TypeScript implementation of Dual-Source Agentic RAG. Uses directed acyclic graphs (DAG) to orchestrate stateful tool-calling across internal vector stores and real-time web search.",
+    "A TypeScript implementation of Dual-Source Agentic RAG. Uses cyclic state graphs to orchestrate stateful tool-calling loops across internal vector stores and real-time web search.",
 };
 
 export default function RootLayout({
