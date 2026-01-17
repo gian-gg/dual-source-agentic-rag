@@ -15,6 +15,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useChat } from "@ai-sdk/react";
 import { Bot, Send, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import "highlight.js/styles/github-dark.css";
 
 export function Chat() {
   const { messages, status, sendMessage } = useChat();
@@ -54,9 +58,9 @@ export function Chat() {
           Ask questions about your data or perform web searches.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 p-0 overflow-hidden relative">
-        <ScrollArea ref={scrollRef} className="h-full p-4 w-full">
-          <div className="flex flex-col gap-4 pb-4">
+      <CardContent className="flex-1 p-0! overflow-hidden relative">
+        <ScrollArea ref={scrollRef} className="h-full px-4 w-full">
+          <div className="flex flex-col gap-4 pb-8">
             {messages.length === 0 && (
               <div className="text-center text-muted-foreground mt-20 text-sm">
                 No messages yet. Start the conversation!
@@ -65,7 +69,7 @@ export function Chat() {
             {messages.map((m) => (
               <div
                 key={m.id}
-                className={`flex gap-3 ${m.role === "user" ? "flex-row-reverse" : ""}`}
+                className={`flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${m.role === "user" ? "flex-row-reverse" : ""}`}
               >
                 <Avatar className="w-8 h-8 border border-border">
                   <AvatarFallback
@@ -92,26 +96,56 @@ export function Chat() {
                   {m.parts ? (
                     m.parts.map((part, i) => {
                       if (part.type === "text")
-                        return <span key={i}>{part.text}</span>;
+                        return (
+                          <div
+                            key={i}
+                            className="space-y-4 prose prose-sm dark:prose-invert max-w-none prose-pre:bg-background/50 prose-pre:border prose-pre:border-border"
+                          >
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              rehypePlugins={[rehypeHighlight]}
+                            >
+                              {part.text}
+                            </ReactMarkdown>
+                          </div>
+                        );
                       return null;
                     })
                   ) : (
-                    // Fallback if parts is missing but content exists (though types say parts)
-                    // In some versions content might still be there as string getter
                     <span />
                   )}
                 </div>
               </div>
             ))}
             {isLoading && (
-              <div className="flex gap-3">
+              <div className="flex gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
                 <Avatar className="w-8 h-8 border border-border">
                   <AvatarFallback className="bg-muted">
-                    <Bot className="w-4 h-4" />
+                    <Bot className="w-4 h-4 animate-pulse" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-muted text-foreground rounded-2xl rounded-bl-none px-4 py-2 text-sm">
-                  <span className="animate-pulse">Thinking...</span>
+                <div className="bg-muted text-foreground rounded-2xl rounded-bl-none px-4 py-3 text-sm flex items-center gap-1">
+                  <span className="text-muted-foreground">Thinking</span>
+                  <div className="flex gap-1 ml-1">
+                    <span
+                      className="w-1 h-1 bg-foreground/60 rounded-full animate-bounce"
+                      style={{ animationDelay: "0ms", animationDuration: "1s" }}
+                    />
+                    <span
+                      className="w-1 h-1 bg-foreground/60 rounded-full animate-bounce"
+                      style={{
+                        animationDelay: "150ms",
+                        animationDuration: "1s",
+                      }}
+                    />
+                    <span
+                      className="w-1 h-1 bg-foreground/60 rounded-full animate-bounce"
+                      style={{
+                        animationDelay: "300ms",
+                        animationDuration: "1s",
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             )}
