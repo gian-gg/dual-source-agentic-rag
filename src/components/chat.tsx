@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function Chat() {
   const { messages, status, sendMessage } = useChat();
+
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 

@@ -3,7 +3,7 @@ import { ChatOpenAI } from "@langchain/openai";
 
 export const agentModel = new ChatOpenAI({
   modelName: process.env.AGENT_MODEL_ID!,
-  apiKey: process.env.OPENROUTER_API_KEY,
+  apiKey: process.env.OPENROUTER_API_KEY!,
   configuration: { baseURL: "https://openrouter.ai/api/v1" },
 });
 
