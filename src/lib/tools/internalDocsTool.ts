@@ -18,8 +18,6 @@ const vectorStore = new SupabaseVectorStore(embeddings, {
 export const internalDocsTool = tool(
   async ({ query }) => {
     try {
-      console.log(`🔍 Searching internal docs for: "${query}"`);
-
       const results = await vectorStore.similaritySearch(query, 5); // retrieve top 5 most similar chunks
 
       if (results.length === 0) {
